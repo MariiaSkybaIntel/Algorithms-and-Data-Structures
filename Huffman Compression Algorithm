@@ -1,0 +1,183 @@
+import java.util.*;
+import java.math.*;
+
+public class HuffmanEncoding {
+    public static void main(String args[]) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        String sentence = sc.nextLine();
+
+        int[] ar = new int[256]; // an array to store all the frequencies
+
+        for (int i = 0; i < sentence.length(); i++) {
+            // go through the sentence
+            ar[(int) sentence.charAt(i)]++; // increment the appropriate frequencies
+
+        }
+
+        PriorityQueue<Tree> PQ = new PriorityQueue<Tree>(); // make a priority queue to hold the forest of trees
+
+        for (int i = 0; i < ar.length; i++) {
+            // go through frequency array
+            if (ar[i] > 0) {
+                // print out non-zero frequencies - cast to a char
+                // System.out.println("Letter "+(char)i+" appeared "+ar[i]+" times");
+                // FILL THIS IN:
+
+                // MAKE THE FOREST OF TREES AND ADD THEM TO THE PQ
+
+                // create a new Tree
+                Tree temp = new Tree();
+                // initialise a new node
+                Node node = new Node();
+                // make it the root of temp tree
+                temp.root = node;
+                // insert the letter into the root node
+                temp.root.letter = (char) i;
+                // set the cumulative frequency of that Tree
+                temp.frequency = ar[i];
+                temp.root.smallestLetter = temp.root.letter;
+                // add the Tree into the PQ
+                PQ.add(temp);
+
+            }
+
+        }
+
+        // print the contents of the Priority Queue
+        /*
+         * for(int i=PQ.size();PQ.size()>0;i--) { Tree x = PQ.poll();
+         * System.out.println(x.frequency+" "+x.root.letter);
+         * //System.out.println(PQ.poll().root.letter);
+         * 
+         * }
+         */
+
+        while (PQ.size() > 1) { // while there are two or more Trees left in the forest
+                                // FILL THIS IN:
+
+            // IMPLEMENT THE HUFFMAN ALGORITHM
+
+            Tree newTree = new Tree(); // initialise a new tree
+            Node n = new Node(); // create a new node
+            newTree.root = n; // set this node to be a root of the new tree
+            Tree one = PQ.poll(); // get the first item from PQ
+            Tree two = PQ.poll(); // get the second item from PQ
+
+            if (one.compareTo(two) < 0)// if tree one frequency is bigger: ???????????????????????????????????????????
+            {
+                newTree.root.rightChild = two.root;
+                newTree.root.leftChild = one.root;
+                int a = (int) one.root.smallestLetter;
+                int b = (int) two.root.smallestLetter;
+                int min = java.lang.Math.min(a, b);
+                char smallest = (char) min;
+                newTree.root.smallestLetter = smallest;
+                //newTree.root.smallestLetter = two.root.smallestLetter;
+            } else if (one.compareTo(two) > 0) // if the second tree's frequency is bigger:
+            {
+                newTree.root.rightChild = one.root;
+                newTree.root.leftChild = two.root;
+                int a=(int)one.root.smallestLetter;
+                int b=(int)two.root.smallestLetter;
+                int min = java.lang.Math.min(a,b);
+                char smallest = (char)min;
+                newTree.root.smallestLetter = smallest;
+            }
+
+            newTree.frequency = one.frequency + two.frequency;
+            PQ.add(newTree);
+
+            /*
+             * when you're making the new combined tree, don't forget to assign a default
+             * root node (or else you'll get a null pointer exception); if you like, to
+             * check if everything is working so far, try printing out the letter of the
+             * roots of the two trees you're combining; remember to check the smallest
+             * letter to decide which branch to put on the left, and which on the right
+             */
+
+        }
+        Tree HuffmanTree = PQ.poll(); // now there's only one tree left - get its codes
+        Node current = HuffmanTree.root;
+        /*while (current.leftChild != null) {
+            System.out.println(current.letter);
+            current = current.leftChild;
+        }*/
+        // get all the codes for the letters and print them out
+        // call the getCode() method on the HuffmanTree Tree object for each letter in
+        // the sentence
+        for (int i = 0; i < sentence.length(); i++) {
+            System.out.print(HuffmanTree.getCode(sentence.charAt(i)));
+        }
+
+        sc.close(); // close the scanner and save the world
+    }
+}
+
+class Node {
+    public char letter;// stores letter
+    public char smallestLetter; // a nice idea it to track the smallest letter in the tree in a special variable
+                                // like this
+
+    public Node leftChild; // this node's left child
+    public Node rightChild; // this node's right child
+
+} // end class Node
+
+class Tree implements Comparable<Tree> {
+    public Node root; // first node of tree
+    public int frequency = 0;
+
+    public Tree() // constructor
+    {
+        root = null;
+    } // no nodes in tree yet
+
+    // the PriorityQueue needs to be able to somehow rank the objects in it
+    // thus, the objects in the PriorityQueue must implement an interface called
+    // Comparable
+    // the interface requires you to write a compareTo() method so here it is:
+
+    public int compareTo(Tree checkTree) {
+        if (frequency - checkTree.frequency > 0) { // compare the cumulative frequencies of the tree
+            return 1;
+        } else if (frequency - checkTree.frequency < 0) {
+            return -1; // return 1 or -1 depending on whether these frequencies are bigger or smaller
+        } else {
+            // Sort based on letters
+            char a = this.root.smallestLetter;
+            char b = checkTree.root.smallestLetter;
+
+            if (a > b) {
+                return 1;
+            } else if (a < b) {
+                return -1;
+            }
+            return 0;
+        }
+    }
+
+    String path = "error"; // this variable will track the path to the letter we're looking for
+
+    public String getCode(char letter) { // we want the code for this letter
+
+        return this._getCode(letter, this.root, ""); // return the path that results
+    }
+
+    private String _getCode(char letter, Node current, String path) {
+        if (current == null) {
+            return null;
+        }
+        if (current.letter == letter) {
+            return path;
+        }
+
+        String leftPath = this._getCode(letter, current.leftChild, path + "0");
+        if (leftPath != null) {
+            return leftPath;
+        }
+
+        String rightPath = this._getCode(letter, current.rightChild, path + "1");
+        return rightPath;
+    }
+}
+
