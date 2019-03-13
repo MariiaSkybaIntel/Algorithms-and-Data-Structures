@@ -1,0 +1,39 @@
+/*This java program simulates the Irish lotto game 100,000 times and displays the frequency
+/*with which each number from 1-47 occurred in the game (in percentage)
+/*The more simulations you do, the closer the frequency gets to the same percentage for all numbers
+/*if you increase the number of simulations it might take longer to run this program
+
+import java.util.HashSet;
+import java.util.Random;
+
+public class Lotto 
+{
+	public static void main(String args[])
+	{
+		int ar [] = new int[49]; //store the frequency of each number drawn in games
+		HashSet<Integer> myHashSet = new HashSet<Integer>();
+		
+		for(int i=1;i<1000001;i++) //loop 100 times
+		{
+			for(int n=1;n<48;n++) //add numbers from 1 to 47
+			{
+				myHashSet.add((int)n);
+			}
+			int size = myHashSet.size();
+					for(int j=1;j<=6;j++) //chose 6 numbers
+					{
+						int item = new Random().nextInt(size+1); //choose a number between 1 and 47
+						ar[item]++; //increment the number of occurrences of this number
+						myHashSet.remove(item); //after a number has been drawn  - exclude it 
+					}
+					myHashSet.clear(); //remove all numbers from the set
+			
+		}
+		for(int i=1;i<ar.length-1;i++)
+		{
+			System.out.println("Number "+i+" occurred in : "+(double)ar[i]/100000+"%"); //print the percentage for each number
+		}
+		
+	}
+}
+
