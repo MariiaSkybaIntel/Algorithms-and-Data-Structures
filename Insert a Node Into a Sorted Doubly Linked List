@@ -1,0 +1,46 @@
+/***Description***/
+/*This method takes two parameters: the head of the doubly linked list and the data to insert. 
+It then inserts the Node with the data into the correct position in the list and returns the head of the new list*/
+
+public static Node insertNode(Node head, int data) 
+{       
+    Node newNode = new Node(data);
+    Node current=head;
+    Node temp=null;
+    
+    //check if the list is empty
+    if(head==null)
+      return null;
+      
+    //check if the list contains a single Node
+    if(head.next==null)
+       return head;
+    
+    while(current.next!=null)//repeat until we have reached the last node
+      {
+         if(newNode.data<current.data) //if we need to insert in the beginning of the list
+            {
+                newNode.next=current;
+                current.previous=newNode;
+                head=newNode;
+                return head;
+            }            
+            else if(newNode.data>=current.data&&newNode.data<current.next.data) //if we need to insert in the middle of the list
+            {
+                temp = current.next;
+                current.next=newNode;
+                newNode.next=temp;
+                newNode.previous=current;
+                temp.previous=newNode;
+                return head;
+            }
+           
+            else  
+                current=current.next; //move forward
+        }
+        
+        //if we need to insert in the end of the list
+        current.next=newNode;
+        newNode.previous=current;
+        return head;
+}
