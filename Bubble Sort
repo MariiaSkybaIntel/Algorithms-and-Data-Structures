@@ -1,8 +1,7 @@
 /*One of the simplest sorting algorithms.
 It checks two adjacent elements and swaps them if they are in the wrong order. 
 It also keeps track of the sorted part of the elements in a set that's being sorted.
-Time complexity of Bubble Sort: O(n^2). Not suitable for dealing with large data sets
-as it lacks efficiency */
+Time complexity: O(n^2).*/
 
 public class BubbleSort
 {
