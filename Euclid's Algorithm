@@ -1,0 +1,53 @@
+/*
+Euclid's algorithm is an efficient method for computing the greatest common divisor of two positive numbers.
+Named after Euclid, ancient Greek mathematician who first described it in his "Elements" in 300 B.C.
+Complexity: O(n)
+Description:
+r - remainder; m,n - integers > 0; m>n
+Step 1: Divide m by n
+Step 2: If r=0, n is the GCD. Done! Else go to Step 3
+Step 3: If r!=0, let m=n, n=r and go to Step 1. Repeat until r=0
+*/
+
+public static int getGCD(int m, int n)
+{
+    int r=-1; //set r to a default value of -1
+    //check if both numbers are greater than zero (to avoid dividing by zero)
+    if(m==0||n==0)
+    {
+        System.out.println("Numbers must be greater than zero");
+        return r;
+    }
+    
+    //check if both numbers are positive
+    if(m<0||n<0)
+    {
+        System.out.println("Both numbers must be positive. They will be converted");
+        m=Math.abs(m);
+        n=Math.abs(n);
+    }
+    
+    //check if m is greater than n
+    if(m<n)
+    {
+        System.out.println("m must be greater than n. Numbers will be swapped");
+        int temp=m;
+        m=n;
+        n=temp;
+    }
+    
+    //Step 1: Divide m by n and find the remainder
+    r=m%n;
+    
+    //Step 2: Check if the remainder is zero
+    if(r==0)
+        return n; //n is the GCD
+        
+    Step 3: If r!=0
+    else
+    {
+        m=n;
+        n=r;
+        return getGCD(m,n); //Go to Step 1. Recursively call the method again until r=0
+    }
+}
